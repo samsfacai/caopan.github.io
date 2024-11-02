@@ -42,7 +42,8 @@
         /* 标题样式 */
         
         h2 {
-            font-size: 28px;
+            font-size: 24px;
+            /* 缩小标题字体大小 */
             color: #cc7a00;
             margin-bottom: 20px;
         }
@@ -65,8 +66,8 @@
             /* 调整宽度为 100% */
             max-width: 400px;
             /* 最大宽度为 400px */
-            padding: 15px;
-            /* 增加内边距 */
+            padding: 12px;
+            /* 缩小内边距 */
             border: 1px solid #ccc;
             border-radius: 8px;
             font-size: 16px;
@@ -162,12 +163,18 @@
         /* 媒体查询：在小屏幕上调整样式 */
         
         @media (max-width: 600px) {
+            h2 {
+                font-size: 20px;
+                /* 缩小移动设备上的标题字体大小 */
+            }
             input,
             select {
                 width: 90%;
                 /* 在小屏幕上宽度为 90% */
                 max-width: none;
                 /* 取消最大宽度限制 */
+                padding: 10px;
+                /* 缩小内边距 */
             }
         }
     </style>
