@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加密货币复利计算器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1f25 0%, #242930 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .calculator {
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin: auto;
+            text-align: center;
+        }
+        
+        h2 {
+            font-size: 20px;
+        }
+        
+        .input-grid {
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 10px;
+            color: #a0a0a0;
+            font-weight: 500;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        #result {
+            margin-top: 30px;
+            font-size: 12px;
+            /* 修改为所需的字体大小 */
+        }
+        
+        .result-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .result-table {
+            display: table;
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .result-table th,
+        .result-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .result-table th {
+            color: #3498db;
+        }
+        
+        .language-selector {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="calculator">
+            <h2 id="calculatorTitle">加密货币复利计算器</h2>
+            <div class="language-selector">
+                <label id="languageLabel" for="language">选择语言:</label>
+                <select id="language" onchange="changeLanguage()">
+                    <option value="zh">简体中文</option>
+                    <option value="en">English</option>
+                    <option value="ja">日本語</option>
+                    <option value="ko">한국어</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="hi">हिन्दी</option>
+                    <option value="ar">العربية</option> <!-- 添加阿拉伯语选项 -->
+                </select>
+            </div>
+
+            <div class="input-grid">
+                <div class="input-group">
+                    <label id="initialInvestmentLabel">初始投资金额 (USDT)</label>
+                    <input type="number" id="initialInvestment" placeholder="请输入初始投资金额">
+                </div>
+
+                <div class="input-group">
+                    <label id="targetAmountLabel">目标总金额 (USDT)</label>
+                    <input type="number" id="targetAmount" placeholder="请输入目标总金额">
+                </div>
+
+                <div class="input-group">
+                    <label id="cryptoPriceLabel">加密货币当前价格 (USDT)</label>
+                    <input type="number" id="cryptoPrice" placeholder="请输入当前价格">
+                </div>
+
+                <div class="input-group">
+                    <label id="returnRateLabel">每次交易预期收益率 (%)</label>
+                    <input type="number" id="returnRate" placeholder="请输入预期收益率">
+                </div>
+            </div>
+
+            <button id="calculateButton" onclick="calculate()">计算目标</button>
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'zh'; // 默认语言
+
+        function calculate() {
+            const initialInvestment = parseFloat(document.getElementById('initialInvestment').value);
+            const targetAmount = parseFloat(document.getElementById('targetAmount').value);
+            let cryptoPrice = parseFloat(document.getElementById('cryptoPrice').value);
+            const returnRate = parseFloat(document.getElementById('returnRate').value) / 100;
+            const priceIncreaseRate = 0.005; // 假设价格每次增加 0.5%
+
+            if (isNaN(initialInvestment) || isNaN(targetAmount) || isNaN(cryptoPrice) || isNaN(returnRate)) {
+                document.getElementById('result').innerHTML = '<p style="color: red;">请确保所有输入框都已填写正确的数值。</p>';
+                return;
+            }
+
+            let currentAmount = initialInvestment;
+            let totalTrades = 0;
+            const history = [];
+
+            while (currentAmount < targetAmount) {
+                totalTrades += 1;
+
+                // 计算当前轮次的利润
+                const profitAmount = currentAmount * returnRate;
+                currentAmount += profitAmount;
+
+                // 计算买入的加密货币数量
+                const buyAmount = currentAmount / cryptoPrice;
+
+                // 根据收益率计算卖出价格
+                const sellTokenPrice = cryptoPrice * (1 + returnRate);
+
+                // 更新加密货币价格
+                cryptoPrice *= (1 + priceIncreaseRate);
+
+                // 计算卖出后的总金额
+                history.push({
+                    tradeNumber: totalTrades,
+                    buyTokenPrice: sellTokenPrice / (1 + returnRate), // 买入价格
+                    sellTokenPrice: sellTokenPrice,
+                    profit: profitAmount // 每轮次的利润
+                });
+            }
+
+            displayResults(history, initialInvestment, targetAmount, totalTrades);
+        }
+
+        function displayResults(history, initialInvestment, targetAmount, totalTrades) {
+            const resultDiv = document.getElementById('result');
+            const translations = getTranslations(currentLanguage);
+
+            let resultHTML = `<h3>${translations.resultSummaryTitle}</h3>`;
+            resultHTML += `<p>${translations.initialInvestmentText} ${initialInvestment.toFixed(2)} USDT</p>`;
+            resultHTML += `<p>${translations.targetAmountText} ${targetAmount.toFixed(2)} USDT</p>`;
+            resultHTML += `<p>${translations.totalTradesText} ${totalTrades}</p>`;
+
+            resultHTML += `<div class="result-card"><table class="result-table"><thead><tr>`;
+            resultHTML += `<th>${translations.tradeNumberHeader}</th>`;
+            resultHTML += `<th>${translations.buyPriceHeader}</th>`;
+            resultHTML += `<th>${translations.sellPriceHeader}</th>`;
+            resultHTML += `<th>${translations.profitHeader}</th>`;
+            resultHTML += `</tr></thead><tbody>`;
+
+            history.forEach(item => {
+                resultHTML += `<tr>`;
+                resultHTML += `<td>${item.tradeNumber}</td>`;
+                resultHTML += `<td>${item.buyTokenPrice.toFixed(10)} USDT</td>`;
+                resultHTML += `<td>${item.sellTokenPrice.toFixed(10)} USDT</td>`;
+                resultHTML += `<td>${item.profit.toFixed(2)} USDT</td>`;
+                resultHTML += `</tr>`;
+            });
+
+            resultHTML += `</tbody></table></div>`;
+            resultDiv.innerHTML = resultHTML;
+        }
+
+        function changeLanguage() {
+            const language = document.getElementById('language').value;
+            currentLanguage = language;
+
+            const translations = getTranslations(language);
+
+            document.querySelector('h2#calculatorTitle').innerText = translations.title;
+            document.querySelector('label#initialInvestmentLabel').innerText = translations.initialInvestmentLabel;
+            document.querySelector('label#targetAmountLabel').innerText = translations.targetAmountLabel;
+            document.querySelector('label#cryptoPriceLabel').innerText = translations.cryptoPriceLabel;
+            document.querySelector('label#returnRateLabel').innerText = translations.returnRateLabel;
+            document.querySelector('button#calculateButton').innerText = translations.calculateButton;
+            document.querySelector('label#languageLabel').innerText = translations.languageLabel; // 更新语言选择文本
+
+            // 更新输入框的 placeholder
+            document.getElementById('initialInvestment').placeholder = translations.initialInvestmentPlaceholder;
+            document.getElementById('targetAmount').placeholder = translations.targetAmountPlaceholder;
+            document.getElementById('cryptoPrice').placeholder = translations.cryptoPricePlaceholder;
+            document.getElementById('returnRate').placeholder = translations.returnRatePlaceholder;
+
+            // 如果已经有结果，更新结果文本
+            if (document.getElementById('result').innerHTML) {
+                displayResults(history, initialInvestment, targetAmount, totalTrades);
+            }
+        }
+
+        function getTranslations(language) {
+            const translations = {
+                'zh': {
+                    title: '加密货币复利计算器',
+                    initialInvestmentLabel: '初始投资金额 (USDT)',
+                    targetAmountLabel: '目标总金额 (USDT)',
+                    cryptoPriceLabel: '加密货币当前价格 (USDT)',
+                    returnRateLabel: '每次交易预期收益率 (%)',
+                    calculateButton: '计算目标',
+                    resultSummaryTitle: '计算结果摘要',
+                    initialInvestmentText: '初始投资: ',
+                    targetAmountText: '目标金额: ',
+                    totalTradesText: '需要交易次数: ',
+                    tradeNumberHeader: '交易次数',
+                    buyPriceHeader: '买入价格',
+                    sellPriceHeader: '卖出价格',
+                    profitHeader: '利润',
+                    initialInvestmentPlaceholder: '请输入初始投资金额',
+                    targetAmountPlaceholder: '请输入目标总金额',
+                    cryptoPricePlaceholder: '请输入当前价格',
+                    returnRatePlaceholder: '请输入预期收益率',
+                    languageLabel: '选择语言:', // 添加语言选择文本
+                },
+                'en': {
+                    title: 'Cryptocurrency Compound Interest Calculator',
+                    initialInvestmentLabel: 'Initial Investment Amount (USDT)',
+                    targetAmountLabel: 'Target Amount (USDT)',
+                    cryptoPriceLabel: 'Current Cryptocurrency Price (USDT)',
+                    returnRateLabel: 'Expected Return Rate (%)',
+                    calculateButton: 'Calculate Target',
+                    resultSummaryTitle: 'Calculation Result Summary',
+                    initialInvestmentText: 'Initial Investment: ',
+                    targetAmountText: 'Target Amount: ',
+                    totalTradesText: 'Trades Needed: ',
+                    tradeNumberHeader: 'Trade Number',
+                    buyPriceHeader: 'Buy Price',
+                    sellPriceHeader: 'Sell Price',
+                    profitHeader: 'Profit',
+                    initialInvestmentPlaceholder: 'Enter initial investment amount',
+                    targetAmountPlaceholder: 'Enter target amount',
+                    cryptoPricePlaceholder: 'Enter current price',
+                    returnRatePlaceholder: 'Enter expected return rate',
+                    languageLabel: 'Select Language:', // 添加语言选择文本
+                },
+                'ja': {
+                    title: '暗号通貨複利計算機',
+                    initialInvestmentLabel: '初期投資額 (USDT)',
+                    targetAmountLabel: '目標金額 (USDT)',
+                    cryptoPriceLabel: '暗号通貨の現在の価格 (USDT)',
+                    returnRateLabel: '取引ごとの期待収益率 (%)',
+                    calculateButton: '目標を計算',
+                    resultSummaryTitle: '計算結果の概要',
+                    initialInvestmentText: '初期投資: ',
+                    targetAmountText: '目標金額: ',
+                    totalTradesText: '必要な取引回数: ',
+                    tradeNumberHeader: '取引回数',
+                    buyPriceHeader: '購入価格',
+                    sellPriceHeader: '売却価格',
+                    profitHeader: '利益',
+                    initialInvestmentPlaceholder: '初期投資額を入力してください',
+                    targetAmountPlaceholder: '目標金額を入力してください',
+                    cryptoPricePlaceholder: '現在の価格を入力してください',
+                    returnRatePlaceholder: '期待収益率を入力してください',
+                    languageLabel: '言語を選択:', // 添加语言选择文本
+                },
+                'ko': {
+                    title: '암호화폐 복리 계산기',
+                    initialInvestmentLabel: '초기 투자 금액 (USDT)',
+                    targetAmountLabel: '목표 금액 (USDT)',
+                    cryptoPriceLabel: '현재 암호화폐 가격 (USDT)',
+                    returnRateLabel: '거래당 예상 수익률 (%)',
+                    calculateButton: '목표 계산',
+                    resultSummaryTitle: '계산 결과 요약',
+                    initialInvestmentText: '초기 투자: ',
+                    targetAmountText: '목표 금액: ',
+                    totalTradesText: '필요한 거래 횟수: ',
+                    tradeNumberHeader: '거래 횟수',
+                    buyPriceHeader: '구매 가격',
+                    sellPriceHeader: '판매 가격',
+                    profitHeader: '이익',
+                    initialInvestmentPlaceholder: '초기 투자 금액을 입력하세요',
+                    targetAmountPlaceholder: '목표 금액을 입력하세요',
+                    cryptoPricePlaceholder: '현재 가격을 입력하세요',
+                    returnRatePlaceholder: '예상 수익률을 입력하세요',
+                    languageLabel: '언어 선택:', // 添加语言选择文本
+                },
+                'es': {
+                    title: 'Calculadora de Interés Compuesto de Criptomonedas',
+                    initialInvestmentLabel: 'Monto de Inversión Inicial (USDT)',
+                    targetAmountLabel: 'Monto Objetivo (USDT)',
+                    cryptoPriceLabel: 'Precio Actual de Criptomonedas (USDT)',
+                    returnRateLabel: 'Tasa de Retorno Esperada (%)',
+                    calculateButton: 'Calcular Objetivo',
+                    resultSummaryTitle: 'Resumen de Resultados de Cálculo',
+                    initialInvestmentText: 'Inversión Inicial: ',
+                    targetAmountText: 'Monto Objetivo: ',
+                    totalTradesText: 'Transacciones Necesarias: ',
+                    tradeNumberHeader: 'Número de Transacción',
+                    buyPriceHeader: 'Precio de Compra',
+                    sellPriceHeader: 'Precio de Venta',
+                    profitHeader: 'Beneficio',
+                    initialInvestmentPlaceholder: 'Ingrese el monto de inversión inicial',
+                    targetAmountPlaceholder: 'Ingrese el monto objetivo',
+                    cryptoPricePlaceholder: 'Ingrese el precio actual',
+                    returnRatePlaceholder: 'Ingrese la tasa de retorno esperada',
+                    languageLabel: 'Seleccionar idioma:', // 添加语言选择文本
+                },
+                'fr': {
+                    title: 'Calculateur d\'Intérêt Composé en Cryptomonnaie',
+                    initialInvestmentLabel: 'Montant de l\'Investissement Initial (USDT)',
+                    targetAmountLabel: 'Montant Cible (USDT)',
+                    cryptoPriceLabel: 'Prix Actuel de la Cryptomonnaie (USDT)',
+                    returnRateLabel: 'Taux de Rendement Attendu (%)',
+                    calculateButton: 'Calculer l\'Objectif',
+                    resultSummaryTitle: 'Résumé des Résultats du Calcul',
+                    initialInvestmentText: 'Investissement Initial: ',
+                    targetAmountText: 'Montant Cible: ',
+                    totalTradesText: 'Transactions Nécessaires: ',
+                    tradeNumberHeader: 'Numéro de Transaction',
+                    buyPriceHeader: 'Prix d\'Achat',
+                    sellPriceHeader: 'Prix de Vente',
+                    profitHeader: 'Bénéfice',
+                    initialInvestmentPlaceholder: 'Entrez le montant de l\'investissement initial',
+                    targetAmountPlaceholder: 'Entrez le montant cible',
+                    cryptoPricePlaceholder: 'Entrez le prix actuel',
+                    returnRatePlaceholder: 'Entrez le taux de rendement attendu',
+                    languageLabel: 'Choisir la langue:', // 添加语言选择文本
+                },
+                'de': {
+                    title: 'Kryptowährungs-Zinseszinsrechner',
+                    initialInvestmentLabel: 'Anfangsinvestitionsbetrag (USDT)',
+                    targetAmountLabel: 'Zielbetrag (USDT)',
+                    cryptoPriceLabel: 'Aktueller Preis der Kryptowährung (USDT)',
+                    returnRateLabel: 'Erwartete Rendite pro Handel (%)',
+                    calculateButton: 'Ziel Berechnen',
+                    resultSummaryTitle: 'Berechnungsergebnis Zusammenfassung',
+                    initialInvestmentText: 'Anfangsinvestition: ',
+                    targetAmountText: 'Zielbetrag: ',
+                    totalTradesText: 'Benötigte Handelszahlen: ',
+                    tradeNumberHeader: 'Handelsnummer',
+                    buyPriceHeader: 'Kaufpreis',
+                    sellPriceHeader: 'Verkaufspreis',
+                    profitHeader: 'Gewinn',
+                    initialInvestmentPlaceholder: 'Geben Sie den Anfangsinvestitionsbetrag ein',
+                    targetAmountPlaceholder: 'Geben Sie den Zielbetrag ein',
+                    cryptoPricePlaceholder: 'Geben Sie den aktuellen Preis ein',
+                    returnRatePlaceholder: 'Geben Sie die erwartete Rendite ein',
+                    languageLabel: 'Sprache wählen:', // 添加语言选择文本
+                },
+                'hi': {
+                    title: 'क्रिप्टोक्यूरेंसी चक्रवृद्धि ब्याज कैलकुलेटर',
+                    initialInvestmentLabel: 'प्रारंभिक निवेश राशि (USDT)',
+                    targetAmountLabel: 'लक्ष्य राशि (USDT)',
+                    cryptoPriceLabel: 'क्रिप्टोक्यूरेंसी की वर्तमान कीमत (USDT)',
+                    returnRateLabel: 'प्रत्येक व्यापार की अपेक्षित लाभ दर (%)',
+                    calculateButton: 'लक्ष्य की गणना करें',
+                    resultSummaryTitle: 'गणना परिणाम सारांश',
+                    initialInvestmentText: 'प्रारंभिक निवेश: ',
+                    targetAmountText: 'लक्ष्य राशि: ',
+                    totalTradesText: 'आवश्यक व्यापारों की संख्या: ',
+                    tradeNumberHeader: 'व्यापार संख्या',
+                    buyPriceHeader: 'खरीद मूल्य',
+                    sellPriceHeader: 'बिक्री मूल्य',
+                    profitHeader: 'लाभ',
+                    initialInvestmentPlaceholder: 'प्रारंभिक निवेश राशि दर्ज करें',
+                    targetAmountPlaceholder: 'लक्ष्य राशि दर्ज करें',
+                    cryptoPricePlaceholder: 'वर्तमान कीमत दर्ज करें',
+                    returnRatePlaceholder: 'अपेक्षित लाभ दर दर्ज करें',
+                    languageLabel: 'भाषा चुनें:', // 添加语言选择文本
+                },
+                'ar': {
+                    title: 'حاسبة الفائدة المركبة للعملات المشفرة',
+                    initialInvestmentLabel: 'مبلغ الاستثمار الأولي (USDT)',
+                    targetAmountLabel: 'المبلغ المستهدف (USDT)',
+                    cryptoPriceLabel: 'السعر الحالي للعملة المشفرة (USDT)',
+                    returnRateLabel: 'معدل العائد المتوقع (%)',
+                    calculateButton: 'احسب الهدف',
+                    resultSummaryTitle: 'ملخص نتائج الحساب',
+                    initialInvestmentText: 'الاستثمار الأولي: ',
+                    targetAmountText: 'المبلغ المستهدف: ',
+                    totalTradesText: 'عدد المعاملات المطلوبة: ',
+                    tradeNumberHeader: 'عدد المعاملات',
+                    buyPriceHeader: 'سعر الشراء',
+                    sellPriceHeader: 'سعر البيع',
+                    profitHeader: 'الربح',
+                    initialInvestmentPlaceholder: 'أدخل مبلغ الاستثمار الأولي',
+                    targetAmountPlaceholder: 'أدخل المبلغ المستهدف',
+                    cryptoPricePlaceholder: 'أدخل السعر الحالي',
+                    returnRatePlaceholder: 'أدخل معدل العائد المتوقع',
+                    languageLabel: 'اختر اللغة:', // 添加语言选择文本
+                },
+            };
+            return translations[language];
+        }
+
+        function getTranslation(key) {
+            const translations = getTranslations(currentLanguage);
+            return translations[key];
+        }
+    </script>
+</body>
+
+</html>
