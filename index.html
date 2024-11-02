@@ -27,12 +27,13 @@
         /* 容器样式 */
         
         .container {
-            max-width: 800px;
-            margin: 0 auto;
+            width: 100%;
+            max-width: 600px;
             background: #ffffff;
             border-radius: 15px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
+            padding: 20px;
+            margin: 10px;
         }
         /* 计算器样式 */
         
@@ -43,7 +44,6 @@
         
         h2 {
             font-size: 24px;
-            /* 缩小标题字体大小 */
             color: #cc7a00;
             margin-bottom: 20px;
         }
@@ -63,11 +63,7 @@
         
         input {
             width: 100%;
-            /* 调整宽度为 100% */
-            max-width: 400px;
-            /* 最大宽度为 400px */
             padding: 12px;
-            /* 缩小内边距 */
             border: 1px solid #ccc;
             border-radius: 8px;
             font-size: 16px;
@@ -84,7 +80,7 @@
         
         button {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             border: none;
             border-radius: 8px;
             background-color: #ff9900;
@@ -106,9 +102,8 @@
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 20px;
-            margin-bottom: 20px;
+            margin-top: 20px;
             text-align: center;
-            width: 100%;
             overflow-x: auto;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
@@ -118,6 +113,7 @@
             width: 100%;
             border-collapse: collapse;
             table-layout: auto;
+            overflow-x: auto;
         }
         
         .result-table th,
@@ -143,38 +139,45 @@
         
         select {
             width: 100%;
-            /* 调整宽度为 100% */
-            max-width: 400px;
-            /* 最大宽度为 400px */
             padding: 12px;
-            /* 增加内边距 */
             border-radius: 8px;
             border: 1px solid #ccc;
             font-size: 16px;
             margin-top: 5px;
             transition: border-color 0.3s, background-color 0.3s;
         }
-        /* 鼠标悬停时的样式 */
         
         .language-selector select:hover {
             background-color: #f0f0f0;
-            /* 鼠标悬停时改变背景色 */
         }
         /* 媒体查询：在小屏幕上调整样式 */
         
         @media (max-width: 600px) {
             h2 {
                 font-size: 20px;
-                /* 缩小移动设备上的标题字体大小 */
             }
             input,
             select {
                 width: 90%;
-                /* 在小屏幕上宽度为 90% */
-                max-width: none;
-                /* 取消最大宽度限制 */
                 padding: 10px;
-                /* 缩小内边距 */
+            }
+            button {
+                padding: 12px;
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            h2 {
+                font-size: 18px;
+            }
+            input,
+            select,
+            button {
+                font-size: 14px;
             }
         }
     </style>
@@ -375,7 +378,7 @@
                 'ja': {
                     title: '暗号通貨複利計算機',
                     initialInvestmentLabel: '初期投資額 (USDT)',
-                    targetAmountLabel: '目標金額 (USDT)',
+                    targetAmountLabel: '目標���額 (USDT)',
                     cryptoPriceLabel: '暗号通貨の現在の価格 (USDT)',
                     returnRateLabel: '取引ごとの期待収益率 (%)',
                     calculateButton: '目標を計算',
@@ -436,7 +439,7 @@
                     languageLabel: 'Seleccionar idioma:', // 添加语言选择文本
                 },
                 'fr': {
-                    title: 'Calculateur d\'Intérêt Composé en Cryptomonnaie',
+                    title: 'Calculateur d\'Int��rêt Composé en Cryptomonnaie',
                     initialInvestmentLabel: 'Montant de l\'Investissement Initial (USDT)',
                     targetAmountLabel: 'Montant Cible (USDT)',
                     cryptoPriceLabel: 'Prix Actuel de la Cryptomonnaie (USDT)',
@@ -475,7 +478,7 @@
                     targetAmountPlaceholder: 'Geben Sie den Zielbetrag ein',
                     cryptoPricePlaceholder: 'Geben Sie den aktuellen Preis ein',
                     returnRatePlaceholder: 'Geben Sie die erwartete Rendite ein',
-                    languageLabel: 'Sprache wählen:', // 添加语言选择文本
+                    languageLabel: 'Sprache wählen:', // 添加语言选择��本
                 },
                 'hi': {
                     title: 'क्रिप्टोक्यूरेंसी चक्रवृद्धि ब्याज कैलकुलेटर',
