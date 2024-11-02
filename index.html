@@ -104,7 +104,6 @@
             padding: 20px;
             margin-top: 20px;
             text-align: center;
-            overflow-x: auto;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         /* 表格样式 */
@@ -112,14 +111,16 @@
         .result-table {
             width: 100%;
             border-collapse: collapse;
-            table-layout: auto;
-            overflow-x: auto;
+            table-layout: fixed;
+            /* 固定布局，自动调整宽度 */
         }
         
         .result-table th,
         .result-table td {
             padding: 12px;
             text-align: left;
+            word-wrap: break-word;
+            /* 自动换行 */
         }
         
         .result-table th {
@@ -281,8 +282,8 @@
             const translations = getTranslations(currentLanguage);
 
             let resultHTML = `<h3>${translations.resultSummaryTitle}</h3>`;
-            resultHTML += `<p>${translations.initialInvestmentText} ${initialInvestment.toFixed(2)} USDT</p>`;
-            resultHTML += `<p>${translations.targetAmountText} ${targetAmount.toFixed(2)} USDT</p>`;
+            resultHTML += `<p>${translations.initialInvestmentText} ${initialInvestment.toFixed(2)}</p>`; // 删除 "USDT"
+            resultHTML += `<p>${translations.targetAmountText} ${targetAmount.toFixed(2)}</p>`; // 删除 "USDT"
             resultHTML += `<p>${translations.totalTradesText} ${totalTrades}</p>`;
 
             resultHTML += `<div class="result-card"><table class="result-table"><thead><tr>`;
@@ -295,15 +296,16 @@
             history.forEach(item => {
                 resultHTML += `<tr>`;
                 resultHTML += `<td>${item.tradeNumber}</td>`;
-                resultHTML += `<td>${item.buyTokenPrice.toFixed(10)} USDT</td>`;
-                resultHTML += `<td>${item.sellTokenPrice.toFixed(10)} USDT</td>`;
-                resultHTML += `<td>${item.profit.toFixed(2)} USDT</td>`;
+                resultHTML += `<td>${item.buyTokenPrice.toFixed(10)}</td>`; // 删除 "USDT"
+                resultHTML += `<td>${item.sellTokenPrice.toFixed(10)}</td>`; // 删除 "USDT"
+                resultHTML += `<td>${item.profit.toFixed(2)}</td>`; // 删除 "USDT"
                 resultHTML += `</tr>`;
             });
 
             resultHTML += `</tbody></table></div>`;
             resultDiv.innerHTML = resultHTML;
         }
+
 
         function changeLanguage() {
             const language = document.getElementById('language').value;
