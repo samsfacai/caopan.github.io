@@ -61,8 +61,10 @@
         }
         
         input {
-            width: 80%;
-            /* 调整宽度为 80% */
+            width: 100%;
+            /* 调整宽度为 100% */
+            max-width: 400px;
+            /* 最大宽度为 400px */
             padding: 15px;
             /* 增加内边距 */
             border: 1px solid #ccc;
@@ -139,8 +141,10 @@
         }
         
         select {
-            width: 80%;
-            /* 调整宽度为 80% */
+            width: 100%;
+            /* 调整宽度为 100% */
+            max-width: 400px;
+            /* 最大宽度为 400px */
             padding: 12px;
             /* 增加内边距 */
             border-radius: 8px;
@@ -154,6 +158,17 @@
         .language-selector select:hover {
             background-color: #f0f0f0;
             /* 鼠标悬停时改变背景色 */
+        }
+        /* 媒体查询：在小屏幕上调整样式 */
+        
+        @media (max-width: 600px) {
+            input,
+            select {
+                width: 90%;
+                /* 在小屏幕上宽度为 90% */
+                max-width: none;
+                /* 取消最大宽度限制 */
+            }
         }
     </style>
 </head>
@@ -312,7 +327,7 @@
                     title: '加密货币复利计算器',
                     initialInvestmentLabel: '初始投资金额 (USDT)',
                     targetAmountLabel: '目标总金额 (USDT)',
-                    cryptoPriceLabel: '加��货币当前价格 (USDT)',
+                    cryptoPriceLabel: '加密货币当前价格 (USDT)',
                     returnRateLabel: '每次交易预期收益率 (%)',
                     calculateButton: '计算目标',
                     resultSummaryTitle: '计算结果摘要',
@@ -362,7 +377,7 @@
                     targetAmountText: '目標金額: ',
                     totalTradesText: '必要な取引回数: ',
                     tradeNumberHeader: '取引回数',
-                    buyPriceHeader: '購��価格',
+                    buyPriceHeader: '購入価格',
                     sellPriceHeader: '売却価格',
                     profitHeader: '利益',
                     initialInvestmentPlaceholder: '初期投資額を入力してください',
