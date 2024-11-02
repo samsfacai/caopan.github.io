@@ -114,6 +114,8 @@
             margin-bottom: 20px;
             box-shadow: none;
             /* 去掉阴影效果 */
+            text-align: center;
+            /* 添加此行以居中显示结果 */
         }
         /* 表格样式 */
         
@@ -199,7 +201,7 @@
             const priceIncreaseRate = 0.005; // 假设价格每次增加 0.5%
 
             if (isNaN(initialInvestment) || isNaN(targetAmount) || isNaN(cryptoPrice) || isNaN(returnRate)) {
-                document.getElementById('result').innerHTML = '<p style="color: red;">请确保所有输入框都已填写正确的数值��</p>';
+                document.getElementById('result').innerHTML = '<p style="color: red;">请确保所有输入框都已填写正确的数值</p>';
                 return;
             }
 
@@ -370,7 +372,7 @@
                     buyPriceHeader: '구매 가격',
                     sellPriceHeader: '판매 가격',
                     profitHeader: '이익',
-                    initialInvestmentPlaceholder: '초기 투자 금액을 입력하세요',
+                    initialInvestmentPlaceholder: '초기 투자 금액을 입력하세��',
                     targetAmountPlaceholder: '목표 금액을 입력하세요',
                     cryptoPricePlaceholder: '현재 가격을 입력하세요',
                     returnRatePlaceholder: '예상 수익률을 입력하세요',
@@ -441,7 +443,7 @@
                 },
                 'hi': {
                     title: 'क्रिप्टोक्यूरेंसी चक्रवृद्धि ब्याज कैलकुलेटर',
-                    initialInvestmentLabel: 'प्���ारंभिक निवेश राशि (USDT)',
+                    initialInvestmentLabel: 'प्रारंभिक निवेश राशि (USDT)',
                     targetAmountLabel: 'लक्ष्य राशि (USDT)',
                     cryptoPriceLabel: 'क्रिप्टोक्यूरेंसी की वर्तमान कीमत (USDT)',
                     returnRateLabel: 'प्रत्येक व्यापार की अपेक्षित लाभ दर (%)',
@@ -455,7 +457,7 @@
                     sellPriceHeader: 'बिक्री मूल्य',
                     profitHeader: 'लाभ',
                     initialInvestmentPlaceholder: 'प्रारंभिक निवेश राशि दर्ज करें',
-                    targetAmountPlaceholder: '���क्ष्य राशि दर्ज करें',
+                    targetAmountPlaceholder: 'लक्ष्य राशि दर्ज करें',
                     cryptoPricePlaceholder: 'वर्तमान कीमत दर्ज करें',
                     returnRatePlaceholder: 'अपेक्षित लाभ दर दर्ज करें',
                     languageLabel: 'भाषा चुनें:', // 添加语言选择文本
