@@ -68,6 +68,8 @@
             font-size: 16px;
             transition: border-color 0.3s;
             margin-bottom: 15px;
+            /* 增加阴影效果 */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
         
         input:focus {
@@ -87,6 +89,8 @@
             cursor: pointer;
             transition: background-color 0.3s;
             margin-top: 10px;
+            /* 增加阴影效果 */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         
         button:hover {
@@ -103,6 +107,8 @@
             text-align: center;
             width: 100%;
             overflow-x: auto;
+            /* 增加阴影效果 */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         /* 表格样式 */
         
@@ -121,6 +127,8 @@
         .result-table th {
             background-color: #ff9900;
             color: white;
+            /* 增加边框圆角 */
+            border-radius: 8px 8px 0 0;
         }
         
         .result-table td {
@@ -139,6 +147,14 @@
             font-size: 16px;
             width: 100%;
             margin-top: 5px;
+            /* 增加过渡效果 */
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+        /* 鼠标悬停时的样式 */
+        
+        .language-selector select:hover {
+            background-color: #f0f0f0;
+            /* 鼠标悬停时改变背景色 */
         }
     </style>
 </head>
@@ -305,7 +321,7 @@
                     targetAmountText: '目标金额: ',
                     totalTradesText: '需要交易次数: ',
                     tradeNumberHeader: '交易次数',
-                    buyPriceHeader: '买入���格',
+                    buyPriceHeader: '买入价格',
                     sellPriceHeader: '卖出价格',
                     profitHeader: '利润',
                     initialInvestmentPlaceholder: '请输入初始投资金额',
